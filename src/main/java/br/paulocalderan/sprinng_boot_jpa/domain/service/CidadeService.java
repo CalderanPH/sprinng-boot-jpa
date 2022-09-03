@@ -6,10 +6,14 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+
+import static br.paulocalderan.sprinng_boot_jpa.domain.repository.specs.CidadeSpecs.*;
 
 @Service
 public class CidadeService {
@@ -36,6 +40,14 @@ public class CidadeService {
                 .forEach(System.out::println);
     }
 
+    public void listarCidadesPorNomeSQL() {
+        repository
+                .findByNomeSqlNativo("São Paulo")
+                .stream().map(cidaeProjection
+                        -> new Cidade(cidaeProjection.getID(), cidaeProjection.getNome(), null))
+                .forEach(System.out::println);
+    }
+
     public void listarCidadesPorHabitantes() {
         repository.findByHabitantes(15566666L)
                 .forEach(System.out::println);
@@ -53,6 +65,28 @@ public class CidadeService {
                 .withStringMatcher(ExampleMatcher.StringMatcher.STARTING);
         Example<Cidade> example = Example.of(cidade, matcher);
         return repository.findAll(example);
+    }
+
+    public void listarCidadesByNomeSpecs() {
+        repository
+                .findAll(nomeEqual("São Paulo"))
+                .forEach(System.out::println);
+    }
+
+    public void listarCidadesFiltroDinamico(Cidade filtro) {
+        Specification<Cidade> specs = Specification.where((root, query, criteriaBuilder)
+                -> criteriaBuilder.conjunction());
+        if (filtro.getId() != null) {
+            specs = specs.and(idEqual(filtro.getId()));
+        }
+        if (StringUtils.hasText(filtro.getNome())) {
+            specs = specs.and(nomeLike(filtro.getNome()));
+        }
+        if (filtro.getHabitantes() != null) {
+            specs = specs.and(habitantesGreaterThan(filtro.getHabitantes()));
+        }
+
+        repository.findAll(specs).forEach(System.out::println);
     }
 
 }

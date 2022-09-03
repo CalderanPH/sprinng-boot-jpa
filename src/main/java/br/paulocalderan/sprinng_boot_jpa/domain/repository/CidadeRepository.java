@@ -1,15 +1,21 @@
 package br.paulocalderan.sprinng_boot_jpa.domain.repository;
 
 import br.paulocalderan.sprinng_boot_jpa.domain.entity.Cidade;
+import br.paulocalderan.sprinng_boot_jpa.domain.repository.projection.CidadeProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CidadeRepository extends JpaRepository<Cidade, Long> {
+public interface CidadeRepository extends JpaRepository<Cidade, Long>, JpaSpecificationExecutor<Cidade> {
+
+    @Query(nativeQuery = true, value = "select c.id, c.nome from tb_cidade as c where c.nome =:nome")
+    List<CidadeProjection> findByNomeSqlNativo(@Param("nome") String nome);
 
     List<Cidade> findByNome(String nome);
 
@@ -24,8 +30,6 @@ public interface CidadeRepository extends JpaRepository<Cidade, Long> {
     List<Cidade> findByHabitantes(long habitantes);
 
     List<Cidade> findByHabitantesLessThanAndNomeLike(long habitantes, String nome);
-
-
 
 
 }

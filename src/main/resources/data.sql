@@ -1,10 +1,10 @@
-CREATE TABLE cidade
+CREATE TABLE tb_cidade
 (
     id         BIGINT NOT NULL PRIMARY KEY,
     nome       VARCHAR(50),
     habitantes BIGINT
 );
-INSERT INTO cidade (id, nome, habitantes)
+INSERT INTO tb_cidade (id, nome, habitantes)
 VALUES (1, 'São Paulo', 10000000);
 VALUES (2, 'Porto Alegre', 45456632);
 VALUES (3, 'Rio de Janeiro', 4564678);
