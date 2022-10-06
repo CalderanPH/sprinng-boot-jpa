@@ -1,2 +1,2 @@
-# sprinng_boot_jpa
+# sprinng-boot-jpa
 Estudos.
