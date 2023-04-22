@@ -17,7 +17,8 @@ import static br.paulocalderan.sprinng_boot_jpa.domain.repository.specs.CidadeSp
 
 @Service
 public class CidadeService {
-    private CidadeRepository repository;
+
+    private final CidadeRepository repository;
 
     public CidadeService(CidadeRepository repository) {
         this.repository = repository;
