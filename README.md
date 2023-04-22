@@ -1,2 +1,3 @@
 # sprinng-boot-jpa
-Estudos.
+
+Finalidade deste projeto é utilizar o spring boot JPA, utilizando-se de query.
